@@ -1,6 +1,8 @@
 package com.sbs.untact.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sbs.untact.dto.Article;
+import com.sbs.untact.util.Util;
 
 @Controller
 public class UsrArticleController {
@@ -40,7 +43,10 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/doAdd")
 	@ResponseBody
-	public Map<String, Object> doAdd(String regDate, String title, String body) {
+	public Map<String, Object> doAdd(String title, String body) {
+
+		String regDate = Util.getNowDateStr();
+
 		articles.add(new Article(++articleLastId, regDate, title, body));
 
 		Map<String, Object> rs = new HashMap<>();
@@ -50,6 +56,8 @@ public class UsrArticleController {
 
 		return rs;
 	}
+
+	
 
 	@RequestMapping("/usr/article/doDelete")
 	@ResponseBody
@@ -100,15 +108,14 @@ public class UsrArticleController {
 			rs.put("msg", String.format("%d번 게시물은 존재하지 않습니다.", id));
 			return rs;
 		}
-		
+
 		selArticle.setTitle(title);
 		selArticle.setBody(body);
-		
-		
+
 		rs.put("resultCode", "S-1");
 		rs.put("msg", String.format("%d번 게시물이 수정되었습니다.", id));
 		rs.put("id", id);
-		
+
 		return rs;
 	}
 }
