@@ -14,17 +14,17 @@ import com.sbs.untact.util.Util;
 
 @Controller
 public class UsrArticleController {
-	private int articleLastId;
+	private int articlesLastId;
 	private List<Article> articles;
 
 	public UsrArticleController() {
 		// 멤버변수 초기화
-		articleLastId = 0;
+		articlesLastId = 0;
 		articles = new ArrayList<>();
 
 		// 게시물 2개 생성
-		articles.add(new Article(++articleLastId, "2020-12-12 12:12:21", "2020-12-12 12:12:21", "제목1", "내용1"));
-		articles.add(new Article(++articleLastId, "2020-12-12 12:12:21", "2020-12-12 12:12:21", "제목2", "내용2"));
+		articles.add(new Article(++articlesLastId, "2020-12-12 12:12:21", "2020-12-12 12:12:21", "제목1", "내용1"));
+		articles.add(new Article(++articlesLastId, "2020-12-12 12:12:21", "2020-12-12 12:12:21", "제목2", "내용2"));
 	}
 
 	@RequestMapping("/usr/article/detail")
@@ -46,14 +46,9 @@ public class UsrArticleController {
 		String regDate = Util.getNowDateStr();
 		String updateDate = regDate;
 
-		articles.add(new Article(++articleLastId, regDate, updateDate, title, body));
+		articles.add(new Article(++articlesLastId, regDate, updateDate, title, body));
 
-		Map<String, Object> rs = new HashMap<>();
-		rs.put("resultCode", "S-1");
-		rs.put("msg", "성공하였습니다.");
-		rs.put("id", "articlesLastId");
-
-		return rs;
+		return Util.mapOf("resultCode", "S-1", "msg", "성공하였습니다.", "id", articlesLastId);
 	}
 
 	@RequestMapping("/usr/article/doDelete")
@@ -63,19 +58,14 @@ public class UsrArticleController {
 
 		Map<String, Object> rs = new HashMap<>();
 
-		if (deleteArticleRs) {
-			rs.put("resultCode", "S-1");
-			rs.put("msg", "성공하였습니다.");
-
+		if (deleteArticleRs ==false) {
+			return Util.mapOf("resultCode", "F-1", "msg", "해당 게시물은 존재하지 않습니다." );
 		}
 
 		else {
-			rs.put("resultCode", "F-1");
-			rs.put("msg", "해당 게시물은 존재하지 않습니다.");
+			return Util.mapOf("resultCode", "S-1", "msg", "성공하였습니다.", "id", id );
+			
 		}
-
-		rs.put("id", id);
-		return rs;
 	}
 
 	private boolean deleteArticle(int id) {
@@ -100,20 +90,15 @@ public class UsrArticleController {
 			}
 		}
 		Map<String, Object> rs = new HashMap<>();
+		
 		if (selArticle == null) {
-			rs.put("resultCode", "F-1");
-			rs.put("msg", String.format("%d번 게시물은 존재하지 않습니다.", id));
-			return rs;
+			return Util.mapOf("resultCode", "F-1", "msg", String.format("%d번 게시물은 존재하지 않습니다.", id));
 		}
 
 		selArticle.setUpdateDate(Util.getNowDateStr());
 		selArticle.setTitle(title);
 		selArticle.setBody(body);
 
-		rs.put("resultCode", "S-1");
-		rs.put("msg", String.format("%d번 게시물이 수정되었습니다.", id));
-		rs.put("id", id);
-
-		return rs;
+		return Util.mapOf("resultCode", "S-1", "msg", String.format("%d번 게시물이 수정되었습니다.", id), "id", id);
 	}
 }
