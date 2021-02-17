@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sbs.untact.dto.Article;
@@ -28,22 +27,22 @@ public class UsrArticleController {
 	@RequestMapping("/usr/article/list")
 	@ResponseBody
 	public List<Article> showList(String searchKeywordType, String searchKeyword) {
-		if (searchKeywordType !=null) {
+		if (searchKeywordType != null) {
 			searchKeywordType = searchKeywordType.trim();
 		}
-		
-		if (searchKeywordType ==null || searchKeywordType.trim().length()==0) {
+
+		if (searchKeywordType == null || searchKeywordType.trim().length() == 0) {
 			searchKeywordType = "titleAndBody";
 		}
-		
-		if (searchKeyword != null && searchKeyword.length()==0) {
+
+		if (searchKeyword != null && searchKeyword.length() == 0) {
 			searchKeyword = null;
 		}
-		
+
 		if (searchKeyword != null) {
 			searchKeyword = searchKeyword.trim();
 		}
-		
+
 		return articleService.getArticls(searchKeywordType, searchKeyword);
 	}
 
@@ -57,7 +56,7 @@ public class UsrArticleController {
 		if (body == null) {
 			return new ResultData("F-1", "body를 입력해주세요.");
 		}
-		return articleService.add(title, body);
+		return articleService.arrArticle(title, body);
 	}
 
 	@RequestMapping("/usr/article/doDelete")
@@ -66,7 +65,7 @@ public class UsrArticleController {
 		if (id == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
 		}
-		
+
 		Article article = articleService.getArticle(id);
 
 		if (article == null) {
@@ -99,6 +98,6 @@ public class UsrArticleController {
 			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.");
 		}
 
-		return articleService.modify(id, title, body);
+		return articleService.modifyArticle(id, title, body);
 	}
 }
