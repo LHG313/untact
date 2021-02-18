@@ -21,17 +21,15 @@ public class ArticleService {
 	}
 
 	public ResultData arrArticle(String title, String body) {
-		int id = articleDao.addArticle(title, body);
+		articleDao.addArticle(title, body);
 
+		int id = 1; //임시
 		return new ResultData("S-1", "성공하였습니다.", "id", id);
 	}
 
 	public ResultData deleteArticle(int id) {
-		boolean rs = articleDao.delete(id);
+		articleDao.deleteArticle(id);
 
-		if (rs == false) {
-			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.", "id", id);
-		}
 		return new ResultData("S-1", "삭제하였습니다.", "id", id);
 	}
 
@@ -41,7 +39,7 @@ public class ArticleService {
 		return new ResultData("S-1", "게시물을 수정하였습니다.", "id", id);
 	}
 
-	public List<Article> getArticls(String searchKeywordType, String searchKeyword) {
-		return articleDao.getArticls(searchKeywordType, searchKeyword);
+	public List<Article> getArticles(String searchKeywordType, String searchKeyword) {
+		return articleDao.getArticles(searchKeywordType, searchKeyword);
 	}
 }
