@@ -26,7 +26,8 @@
 			AND title LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if>
 		<if test="searchKeywordType == 'titleAndBody'">
-			AND (title LIKE CONCAT('%', #{searchKeyword}, '%') OR `body` LIKE CONCAT('%', #{searchKeyword}, '%'))
+			AND (title LIKE CONCAT('%', #{searchKeyword}, '%') OR
+			`body` LIKE CONCAT('%', #{searchKeyword}, '%'))
 		</if>
 		ORDER BY id DESC
 	</select>
@@ -48,11 +49,18 @@
 
 	<update id="modifyArticle">
 		UPDATE article
-		SET updateDate = NOW(),
-		title =
-		#{title},
-		`body` = #{body}
-		WHERE id = #{id}
+		<set>
+			<if test="title != null || body != null">
+				updateDate = NOW(),
+			</if>
+			<if test="title != null">
+				title =#{title},
+			</if>
+			<if test="body != null">
+				`body` = #{body}
+			</if>
+			WHERE id = #{id}
+		</set>
 	</update>
 
 </mapper>
