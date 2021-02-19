@@ -58,7 +58,7 @@ public class UsrArticleController {
 		if (param.get("body") == null) {
 			return new ResultData("F-1", "body를 입력해주세요.");
 		}
-		return articleService.arrArticle(param);
+		return articleService.addArticle(param);
 	}
 
 	@RequestMapping("/usr/article/doDelete")

@@ -22,7 +22,7 @@ public class ArticleService {
 
 	}
 
-	public ResultData arrArticle(Map<String, Object> param) {
+	public ResultData addArticle(Map<String, Object> param) {
 		articleDao.addArticle(param);
 
 		int id = Util.getAsInt(param.get("id"), 0);
