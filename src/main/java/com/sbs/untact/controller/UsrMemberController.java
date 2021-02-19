@@ -87,4 +87,16 @@ public class UsrMemberController {
 
 	}
 
+	@RequestMapping("/usr/member/doLogout")
+	@ResponseBody
+	public ResultData doLogout(HttpSession session) {
+
+		if (session.getAttribute("loginedMemberId") == null) {
+			return new ResultData("S-2", "이미 로그아웃 되었습니다.");
+		}
+
+		session.removeAttribute("loginedMemberId");
+
+		return new ResultData("S-1", "로그아웃 되었습니다.");
+}
 }
