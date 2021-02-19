@@ -5,7 +5,7 @@
 
 <mapper namespace="com.sbs.untact.dao.MemberDao">
 
-<insert id="join" useGeneratedKeys="true" keyProperty="id">
+	<insert id="join" useGeneratedKeys="true" keyProperty="id">
 		INSERT
 		INTO member
 		SET regDate = NOW(),
@@ -19,5 +19,21 @@
 		cellphoneNo = #{cellphoneNo},
 		email = #{email}
 	</insert>
+
+	<select id="getMember" resultType="Member">
+		SELECT *
+		FROM `member`
+		WHERE
+		loginId
+		= #{id}
+	</select>
+
+	<select id="getMemberByLoginId" resultType="Member">
+		SELECT *
+		FROM `member`
+		WHERE loginId
+		= #{loginId}
+	</select>
+
 
 </mapper>
