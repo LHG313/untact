@@ -62,7 +62,17 @@ cellphoneNo = "01012341234",
 email = "dd31391@gmail.com"
 ;
 
-SELECT * FROM article;
+# 회원, 테스트 데이터 생성, user2
+INSERT INTO `member`
+SET regDate = NOW(),
+updateDate = NOW(),
+loginId = "user2",
+loginPw = "user2",
+`name` = "user2",
+nickname = "user2",
+cellphoneNo = "01012341234",
+email = "dd31391@gmail.com"
+;
 
 # 게시물 테이블에 회원번호 칼럼 추가
 ALTER TABLE article ADD COLUMN memberId INT(10) UNSIGNED NOT NULL AFTER updateDate;
