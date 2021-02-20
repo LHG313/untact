@@ -41,7 +41,8 @@
 		NOW(),
 		title =
 		#{title},
-		`body` = #{body}
+		`body` = #{body},
+		memberId = #{memberId}
 	</insert>
 
 	<delete id="deleteArticle">
