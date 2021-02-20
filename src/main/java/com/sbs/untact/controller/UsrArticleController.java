@@ -40,24 +40,26 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/list")
 	@ResponseBody
-	public List<Article> showList(String searchKeywordType, String searchKeyword) {
+	public ResultData showList(String searchKeywordType, String searchKeyword) {
+
 		if (searchKeywordType != null) {
 			searchKeywordType = searchKeywordType.trim();
 		}
-
-		if (searchKeywordType == null || searchKeywordType.trim().length() == 0) {
+		if (searchKeywordType == null || searchKeywordType.length() == 0) {
 			searchKeywordType = "titleAndBody";
 		}
-
 		if (searchKeyword != null && searchKeyword.length() == 0) {
 			searchKeyword = null;
 		}
-
 		if (searchKeyword != null) {
 			searchKeyword = searchKeyword.trim();
 		}
+		if (searchKeyword == null) {
+			searchKeywordType = null;
+		}
+		List<Article> articles = articleService.getForPrintArticles(searchKeywordType, searchKeyword);
 
-		return articleService.getArticles(searchKeywordType, searchKeyword);
+		return new ResultData("S-1", "성공", "articles", articles);
 	}
 
 	@RequestMapping("/usr/article/doAdd")
