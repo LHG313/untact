@@ -56,20 +56,8 @@ SET regDate = NOW(),
 updateDate = NOW(),
 loginId = "user1",
 loginPw = "user1",
-`name` = "user1",
-nickname = "user1",
-cellphoneNo = "01012341234",
-email = "dd31391@gmail.com"
-;
-
-# 회원, 테스트 데이터 생성, user2
-INSERT INTO `member`
-SET regDate = NOW(),
-updateDate = NOW(),
-loginId = "user2",
-loginPw = "user2",
-`name` = "user2",
-nickname = "user2",
+`name` = "홍길동",
+nickname = "강바람",
 cellphoneNo = "01012341234",
 email = "dd31391@gmail.com"
 ;
@@ -81,3 +69,23 @@ ALTER TABLE article ADD COLUMN memberId INT(10) UNSIGNED NOT NULL AFTER updateDa
 UPDATE article
 SET memberId = 1
 WHERE memberId = 0;
+
+
+# 회원, 테스트 데이터 생성, user2
+INSERT INTO `member`
+SET regDate = NOW(),
+updateDate = NOW(),
+loginId = "user2",
+loginPw = "user2",
+`name` = "임꺽정",
+nickname = "이또한지나가라라",
+cellphoneNo = "01012341234",
+email = "dd31391@gmail.com"
+;
+
+SELECT A.*,
+IFNULL(M.nickname, "탈퇴회원") AS extra__writer
+FROM article AS A
+LEFT JOIN `member` AS M
+ON A.memberId = M.id
+WHERE A.id = 2;
