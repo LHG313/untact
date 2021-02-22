@@ -83,9 +83,21 @@ cellphoneNo = "01012341234",
 email = "dd31391@gmail.com"
 ;
 
-SELECT A.*,
-IFNULL(M.nickname, "탈퇴회원") AS extra__writer
-FROM article AS A
-LEFT JOIN `member` AS M
-ON A.memberId = M.id
-WHERE A.id = 2;
+# 게시물 테이블에 회원번호 칼럼 추가
+ALTER TABLE article ADD COLUMN memberId INT(10) UNSIGNED NOT NULL AFTER updateDate;
+
+SELECT * FROM article;
+
+# 기존 게시물의 작성자를 회원1로 지정
+UPDATE article
+SET memberId = 1
+WHERE memberId = 0;
+
+/*
+insert into article
+(regDate, updateDate, memberId, title, `body`)
+SELECT NOW(), NOW(), FLOOR(RAND() * 2) + 1, CONCAT('제목_', FLOOR(RAND() * 1000) + 1), CONCAT('내용_', FLOOR(RAND() * 1000) + 1)
+from article;
+*/
+
+SELECT COUNT(*) FROM article;
