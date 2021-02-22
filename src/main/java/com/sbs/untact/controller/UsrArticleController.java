@@ -24,7 +24,6 @@ public class UsrArticleController {
 	@RequestMapping("/usr/article/detail")
 	@ResponseBody
 	public ResultData showDetail(Integer id) {
-
 		if (id == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
 		}
@@ -32,7 +31,7 @@ public class UsrArticleController {
 		Article article = articleService.getForPrintArticle(id);
 
 		if (article == null) {
-			return new ResultData("F-2", "존재하지 않는 게시물 번호 입니다.");
+			return new ResultData("F-2", "존재하지 않는 게시물번호 입니다.");
 		}
 
 		return new ResultData("S-1", "성공", "article", article);
@@ -41,22 +40,26 @@ public class UsrArticleController {
 	@RequestMapping("/usr/article/list")
 	@ResponseBody
 	public ResultData showList(String searchKeywordType, String searchKeyword) {
-
 		if (searchKeywordType != null) {
 			searchKeywordType = searchKeywordType.trim();
 		}
+
 		if (searchKeywordType == null || searchKeywordType.length() == 0) {
 			searchKeywordType = "titleAndBody";
 		}
+
 		if (searchKeyword != null && searchKeyword.length() == 0) {
 			searchKeyword = null;
 		}
+
 		if (searchKeyword != null) {
 			searchKeyword = searchKeyword.trim();
 		}
+
 		if (searchKeyword == null) {
 			searchKeywordType = null;
 		}
+
 		List<Article> articles = articleService.getForPrintArticles(searchKeywordType, searchKeyword);
 
 		return new ResultData("S-1", "성공", "articles", articles);
@@ -66,16 +69,12 @@ public class UsrArticleController {
 	@ResponseBody
 	public ResultData doAdd(@RequestParam Map<String, Object> param, HttpSession session) {
 		int loginedMemberId = Util.getAsInt(session.getAttribute("loginedMemberId"), 0);
-
-		if (loginedMemberId == 0) {
-			return new ResultData("F-2", "로그인 후 이용해주세요.");
+		
+		if (param.get("title") == null) {
+			return new ResultData("F-1", "title을 입력해주세요.");
 		}
 
 		if (param.get("title") == null) {
-			return new ResultData("F-1", "title를 입력해주세요.");
-		}
-
-		if (param.get("body") == null) {
 			return new ResultData("F-1", "body를 입력해주세요.");
 		}
 
@@ -88,10 +87,6 @@ public class UsrArticleController {
 	@ResponseBody
 	public ResultData doDelete(Integer id, HttpSession session) {
 		int loginedMemberId = Util.getAsInt(session.getAttribute("loginedMemberId"), 0);
-
-		if (loginedMemberId == 0) {
-			return new ResultData("F-2", "로그인 후 이용해주세요.");
-		}
 
 		if (id == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
@@ -110,7 +105,6 @@ public class UsrArticleController {
 		}
 
 		return articleService.deleteArticle(id);
-
 	}
 
 	@RequestMapping("/usr/article/doModify")
@@ -118,16 +112,12 @@ public class UsrArticleController {
 	public ResultData doModify(Integer id, String title, String body, HttpSession session) {
 		int loginedMemberId = Util.getAsInt(session.getAttribute("loginedMemberId"), 0);
 
-		if (loginedMemberId == 0) {
-			return new ResultData("F-2", "로그인 후 이용해주세요.");
-		}
-
 		if (id == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
 		}
 
 		if (title == null) {
-			return new ResultData("F-1", "title를 입력해주세요.");
+			return new ResultData("F-1", "title을 입력해주세요.");
 		}
 
 		if (body == null) {
