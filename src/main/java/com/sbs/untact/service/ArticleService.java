@@ -13,7 +13,6 @@ import com.sbs.untact.util.Util;
 
 @Service
 public class ArticleService {
-
 	@Autowired
 	private ArticleDao articleDao;
 	@Autowired
@@ -21,13 +20,13 @@ public class ArticleService {
 
 	public Article getArticle(int id) {
 		return articleDao.getArticle(id);
-
 	}
 
 	public ResultData addArticle(Map<String, Object> param) {
 		articleDao.addArticle(param);
 
 		int id = Util.getAsInt(param.get("id"), 0);
+
 		return new ResultData("S-1", "성공하였습니다.", "id", id);
 	}
 
@@ -51,9 +50,11 @@ public class ArticleService {
 		if (article.getMemberId() == actorId) {
 			return new ResultData("S-1", "가능합니다.");
 		}
+
 		if (memberService.isAdmin(actorId)) {
 			return new ResultData("S-2", "가능합니다.");
 		}
+
 		return new ResultData("F-1", "권한이 없습니다.");
 	}
 
@@ -65,9 +66,11 @@ public class ArticleService {
 		return articleDao.getForPrintArticle(id);
 	}
 
-	public List<Article> getForPrintArticles(String searchKeywordType, String searchKeyword, int page, int itemsInAPage) {
+	public List<Article> getForPrintArticles(int boardId, String searchKeywordType, String searchKeyword, int page, int itemsInAPage) {
+
 		int limitStart = (page - 1) * itemsInAPage;
 		int limitTake = itemsInAPage;
-		return articleDao.getForPrintArticles(searchKeywordType, searchKeyword, limitStart, limitTake);
+
+		return articleDao.getForPrintArticles(boardId, searchKeywordType, searchKeyword, limitStart, limitTake);
 	}
 }

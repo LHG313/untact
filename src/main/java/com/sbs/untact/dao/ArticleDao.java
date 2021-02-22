@@ -14,13 +14,17 @@ public interface ArticleDao {
 
 	public void addArticle(Map<String, Object> param);
 
-	public void deleteArticle(int id);
+	public void deleteArticle(@Param("id") int id);
 
-	public void modifyArticle(@Param("id") int id, @Param("title") String title, @Param("body") String body);
+	public void modifyArticle(@Param("id") int id, @Param(value = "title") String title,
+			@Param(value = "body") String body);
 
-	public List<Article> getArticles(@Param("searchKeywordType") String searchKeywordType, @Param("searchKeyword") String searchKeyword);
+	public List<Article> getArticles(@Param("searchKeywordType") String searchKeywordType,
+			@Param("searchKeyword") String searchKeyword);
 
 	public Article getForPrintArticle(@Param("id") int id);
 
-	public List<Article> getForPrintArticles(@Param("searchKeywordType") String searchKeywordType, @Param("searchKeyword") String searchKeyword, @Param("limitStart") int limitStart, @Param("limitTake") int limitTake);
+	public List<Article> getForPrintArticles(@Param("boardId") int boardId, @Param("searchKeywordType") String searchKeywordType,
+			@Param("searchKeyword") String searchKeyword, @Param("limitStart") int limitStart,
+			@Param("limitTake") int limitTake);
 }
