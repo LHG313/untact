@@ -65,19 +65,6 @@ email = "dd31391@gmail.com"
 # 게시물 테이블에 회원번호 칼럼 추가
 ALTER TABLE article ADD COLUMN memberId INT(10) UNSIGNED NOT NULL AFTER updateDate;
 
-SELECT * FROM article;
-
-# 기존 게시물의 작성자를 회원1로 지정
-UPDATE article
-SET memberId = 1
-WHERE memberId = 0;
-
-
-# 게시물 테이블에 회원번호 칼럼 추가
-ALTER TABLE article ADD COLUMN memberId INT(10) UNSIGNED NOT NULL AFTER updateDate;
-
-SELECT * FROM article;
-
 # 기존 게시물의 작성자를 회원1로 지정
 UPDATE article
 SET memberId = 1
@@ -90,7 +77,7 @@ SELECT NOW(), NOW(), FLOOR(RAND() * 2) + 1, CONCAT('제목_', FLOOR(RAND() * 100
 from article;
 */
 
-SELECT * FROM article;
+
 
 # 게시판 테이블 추가
 CREATE TABLE board (
@@ -114,7 +101,6 @@ INSERT INTO board
 SET regDate = NOW(),
 updateDate = NOW(),
 `code` = 'free',
-`name` = '자유';
 `name` = '자유';
 
 # 게시물 테이블에 게시판 번호 칼럼 추가, updateDate 칼럼 뒤에
@@ -159,3 +145,20 @@ updateDate = NOW(),
 articleId = 2,
 memberId = 2,
 `body` = '내용 2입니다.';
+
+# 게시물 전용 댓글에서 범용 댓글로 바꾸기 위해 relTypeCode 추가
+ALTER TABLE reply ADD COLUMN `relTypeCode` CHAR(20) NOT NULL AFTER updateDate; 
+
+# 현재는 게시물 댓글 밖에 없기 때문에 모든 행의 relTypeCode 값을 article 로 지정
+UPDATE reply
+SET relTypeCode = 'article'
+WHERE relTypeCode = '';
+
+# articleId 칼럼명을 relId로 수정
+ALTER TABLE reply CHANGE `articleId` `relId` INT(10) UNSIGNED NOT NULL; 
+
+#고속 검색을 위해서 인덱스 걸기
+ALTER TABLE reply ADD KEY (relTypeCode , relId);
+# SELECT * FROM reply WHERE relTypeCode = 'article' AND relId =5; # 0
+# SELECT * FROM reply WHERE relTypeCode = 'article'; # 0
+# SELECT * FROM reply WHERE relId =5 AND relTypeCode = 'article'; # x

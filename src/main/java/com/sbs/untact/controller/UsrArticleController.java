@@ -43,11 +43,11 @@ public class UsrArticleController {
 	public ResultData showList(@RequestParam(defaultValue = "1") int boardId, String searchKeywordType, String searchKeyword, @RequestParam(defaultValue = "1") int page) {
 
 		Board board = articleService.getBoard(boardId);
-		
+
 		if (board == null) {
 			return new ResultData("F-1", "존재하지 않는 게시판입니다.");
 		}
-		
+
 		if (searchKeywordType != null) {
 			searchKeywordType = searchKeywordType.trim();
 		}
@@ -83,7 +83,7 @@ public class UsrArticleController {
 		if (param.get("body") == null) {
 			return new ResultData("F-1", "body를 입력해주세요.");
 		}
-		
+
 		if (param.get("articleId") == null) {
 			return new ResultData("F-1", "articleId를 입력해주세요.");
 		}
@@ -110,7 +110,7 @@ public class UsrArticleController {
 
 		return articleService.addArticle(param);
 	}
-	
+
 	@RequestMapping("/usr/article/doDelete")
 	@ResponseBody
 	public ResultData doDelete(Integer id, HttpSession session) {
