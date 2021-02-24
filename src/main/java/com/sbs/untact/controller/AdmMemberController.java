@@ -20,7 +20,11 @@ public class AdmMemberController {
 	@Autowired
 	private MemberService memberService;
 
-	
+	@RequestMapping("/adm/member/login")
+	public String login() {
+		return "adm/member/login";
+	}
+
 	@RequestMapping("/adm/member/doLogin")
 	@ResponseBody
 	public ResultData doLogin(String loginId, String loginPw, HttpSession session) {
@@ -41,8 +45,8 @@ public class AdmMemberController {
 		if (existingMember.getLoginPw().equals(loginPw) == false) {
 			return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");
 		}
-		
-		if(memberService.isAdmin(existingMember) == false){
+
+		if (memberService.isAdmin(existingMember) == false) {
 			return new ResultData("F-4", "관리자만 접근할 수 있는 페이지 입니다.");
 		}
 
@@ -51,7 +55,6 @@ public class AdmMemberController {
 		return new ResultData("S-1", String.format("%s님 환영합니다.", existingMember.getNickname()));
 	}
 
-	
 	@RequestMapping("/adm/member/doModify")
 	@ResponseBody
 	public ResultData doModify(@RequestParam Map<String, Object> param, HttpServletRequest req) {
