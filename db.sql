@@ -19,20 +19,17 @@ updateDate = NOW(),
 title = "제목1 입니다.",
 `body`= "내용1 입니다.";
 
-
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
 title = "제목2 입니다.",
 `body`= "내용2 입니다.";
 
-
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
 title = "제목3 입니다.",
 `body`= "내용3 입니다.";
-
 
 # 회원 테이블 생성
 CREATE TABLE `member`(
@@ -62,6 +59,18 @@ cellphoneNo = "01012341234",
 email = "dd31391@gmail.com"
 ;
 
+# 회원, 테스트 데이터 생성
+INSERT INTO `member`
+SET regDate = NOW(),
+updateDate = NOW(),
+loginId = "user2",
+loginPw = "user2",
+`name` = "user2",
+nickname = "user2",
+cellphoneNo = "01012341234",
+email = "dd31391@gmail.com"
+;
+
 # 게시물 테이블에 회원번호 칼럼 추가
 ALTER TABLE article ADD COLUMN memberId INT(10) UNSIGNED NOT NULL AFTER updateDate;
 
@@ -77,8 +86,6 @@ SELECT NOW(), NOW(), FLOOR(RAND() * 2) + 1, CONCAT('제목_', FLOOR(RAND() * 100
 from article;
 */
 
-
-
 # 게시판 테이블 추가
 CREATE TABLE board (
   id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -87,7 +94,6 @@ CREATE TABLE board (
   `code` CHAR(20) UNIQUE NOT NULL,
   `name` CHAR(20) UNIQUE NOT NULL
 );
-
 
 # 공지사항 게시판 추가
 INSERT INTO board
@@ -121,14 +127,13 @@ CREATE TABLE reply (
   `body` TEXT NOT NULL
 );
 
-
 # 댓글 추가
 INSERT INTO reply
 SET regDate = NOW(),
 updateDate = NOW(),
 articleId = 1,
 memberId = 1,
-`body` = '내용 1입니다.';
+`body` = '내용1 입니다.';
 
 # 댓글2 추가
 INSERT INTO reply
@@ -136,7 +141,7 @@ SET regDate = NOW(),
 updateDate = NOW(),
 articleId = 1,
 memberId = 2,
-`body` = '내용 2입니다.';
+`body` = '내용2 입니다.';
 
 # 댓글3 추가
 INSERT INTO reply
@@ -144,7 +149,7 @@ SET regDate = NOW(),
 updateDate = NOW(),
 articleId = 2,
 memberId = 2,
-`body` = '내용 2입니다.';
+`body` = '내용3 입니다.';
 
 # 게시물 전용 댓글에서 범용 댓글로 바꾸기 위해 relTypeCode 추가
 ALTER TABLE reply ADD COLUMN `relTypeCode` CHAR(20) NOT NULL AFTER updateDate; 
@@ -162,3 +167,14 @@ ALTER TABLE reply ADD KEY (relTypeCode , relId);
 # SELECT * FROM reply WHERE relTypeCode = 'article' AND relId =5; # 0
 # SELECT * FROM reply WHERE relTypeCode = 'article'; # 0
 # SELECT * FROM reply WHERE relId =5 AND relTypeCode = 'article'; # x
+
+# authKey 칼럼을 추가
+ALTER TABLE `member` ADD COLUMN authKey CHAR(80) NOT NULL AFTER loginPw;
+
+# authKey 칼럼에 유니크 인덱스 추가
+ALTER TABLE `untact`.`member` ADD UNIQUE INDEX (`authKey`);
+
+# 기존 회원의 authKey 데이터 채우기
+UPDATE `member`
+SET authKey = CONCAT("authKey1__", UUID(), "__", RAND())
+WHERE authKey = '';
