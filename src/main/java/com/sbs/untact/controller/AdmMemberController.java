@@ -20,15 +20,16 @@ import com.sbs.untact.util.Util;
 public class AdmMemberController {
 	@Autowired
 	private MemberService memberService;
-
+	
 	@RequestMapping("/adm/member/login")
 	public String login() {
 		return "adm/member/login";
 	}
+	
 
 	@RequestMapping("/adm/member/doLogin")
 	@ResponseBody
-	public String doLogin(String loginId, String loginPw, HttpSession session) {
+	public String doLogin(String loginId, String loginPw, String redirectUrl, HttpSession session) {
 		if (loginId == null) {
 			return Util.msgAndBack("loginId를 입력해주세요.");
 		}
@@ -46,16 +47,20 @@ public class AdmMemberController {
 		if (existingMember.getLoginPw().equals(loginPw) == false) {
 			return Util.msgAndBack("비밀번호가 일치하지 않습니다.");
 		}
-
-		if (memberService.isAdmin(existingMember) == false) {
+		
+		if ( memberService.isAdmin(existingMember) == false ) {
 			return Util.msgAndBack("관리자만 접근할 수 있는 페이지 입니다.");
 		}
 
 		session.setAttribute("loginedMemberId", existingMember.getId());
-
-	String msg = String.format("%s님 환영합니다.", existingMember.getNickname());
 		
-		return Util.msgAndReplace(msg, "../home/main");
+		String msg = String.format("%s님 환영합니다.", existingMember.getNickname());
+		
+		if ( redirectUrl == null ) {
+			redirectUrl = "../home/main";
+		}
+		
+		return Util.msgAndReplace(msg, redirectUrl);
 	}
 
 	@RequestMapping("/adm/member/doModify")
@@ -78,5 +83,4 @@ public class AdmMemberController {
 
 		return Util.msgAndReplace("로그아웃 되었습니다.", "../member/login");
 	}
-
 }
